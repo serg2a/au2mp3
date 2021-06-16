@@ -16,13 +16,17 @@ int main(int argc, char *argv[]){
     char tmp_str[4096];
     pid_t pid;
 
-    while(argc-1 && *argv)
+    while(*argv)
     {
-        argv++;
-        if (run <= FORK_MAX-1)
+        if (run < FORK_MAX)
         {
             if((pid = fork()) < 0)
-                exit(1);
+            {
+                printf("error create fork!");
+                argv--;
+            }
+
+            argv++;
             if(!pid)
             {
                 strcat(tmp_str, *argv);
@@ -33,15 +37,14 @@ int main(int argc, char *argv[]){
                 "-loglevel", "-8", "-i", *argv, tmp_str, (char*)NULL);
                 exit(0);
             }
-            else
-            {
-                run++;
-                argc--;
-            }
+
+            run++; // Parent
         }
         else if(wait(&status))
+        {
             run--;
-            printf("complete convert!");
+            printf("complete convert!\n");
+        }
     }
     exit(0);
-}
+
