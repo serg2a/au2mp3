@@ -29,19 +29,19 @@ int main(int argc, char *argv[]){
                 strcat(tmp_str, NEWFORMAT);
                 printf("run convert: %s\n", *argv);
 
-                execlp("ffmpeg", "ffmpeg", "-hide_banner", "-loglevel", "-8", "-i", *argv, tmp_str, (char*)NULL);
-
-                printf("complete convert: %s\n", tmp_str);
+                execlp("ffmpeg", "ffmpeg", "-hide_banner", 
+                "-loglevel", "-8", "-i", *argv, tmp_str, (char*)NULL);
                 exit(0);
             }
             else
             {
                 run++;
                 argc--;
-			}
+            }
         }
         else if(wait(&status))
             run--;
+            printf("complete convert!");
     }
     exit(0);
 }
