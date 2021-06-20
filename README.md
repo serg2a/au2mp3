@@ -1,5 +1,5 @@
 # audio2mp3
-> you ned to install https://ffmpeg.org/download.html
+> you need to install https://ffmpeg.org/download.html
 
 Using ffmpg for n processe, input list files:
 ### **example:**
