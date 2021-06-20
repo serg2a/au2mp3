@@ -1,3 +1,6 @@
+/* main.c - audio2mp3 application.   */
+/* Author: Sergei Kravchuk 2021.     */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -5,25 +8,25 @@
 #include <sys/wait.h>
 #include <string.h>
 
-#define FORK_MAX 12
-#define NEWFORMAT ".mp3"
+#define CPU_MAX 12        // Cpu jobs.
+#define NEWFORMAT ".mp3"  // Add tail original name.
+#degine MAX_SIMBOL 4096
 
-
-
-int main(int argc, char *argv[]){
+int 
+main(int argc, char *argv[]){
     int status;
     int run = 0;
-    char tmp_str[4096];
+    char tmp_str[MAX_SIMBOLS];
     pid_t pid;
 
     while(*argv)
     {
-        if (run < FORK_MAX)
+        if (run < CPU_MAX)
         {
             if((pid = fork()) < 0)
             {
                 printf("error create fork!");
-                argv--;
+                exit(1);
             }
 
             argv++;
@@ -31,20 +34,21 @@ int main(int argc, char *argv[]){
             {
                 strcat(tmp_str, *argv);
                 strcat(tmp_str, NEWFORMAT);
-                printf("run convert: %s\n", *argv);
 
                 execlp("ffmpeg", "ffmpeg", "-hide_banner", 
                 "-loglevel", "-8", "-i", *argv, tmp_str, (char*)NULL);
+                
                 exit(0);
             }
 
             run++; // Parent
         }
         else if(wait(&status))
+        /* If the are no free CPU we are waiting for the first free.   */
         {
             run--;
-            printf("complete convert!\n");
         }
+        
     }
     exit(0);
-
+}
