@@ -1,4 +1,4 @@
-/* main.c - audio2mp3 application.   */
+/* audio2mp3.c - audio2mp3 application.   */
 /* Author: Sergei Kravchuk 2021.     */
 
 #include <stdio.h>
