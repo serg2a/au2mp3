@@ -1,5 +1,5 @@
 /* audio2mp3.c - audio2mp3 application.   */
-/* Author: Sergei Kravchuk 2021.     */
+/* Author: S. A. Kravchuk 2021.           */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,48 +7,95 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <string.h>
+#include <stdbool.h>
+#include <unistd.h>
 
-#define CPU_MAX 8        // Cpu jobs.
-#define NEWFORMAT ".mp3"  // Add tail original name.
-#define MAX_SIMBOL 4096
+#define BUFF 255
+#define CPU_MAX sysconf(_SC_STREAM_MAX)
+#define FORMAT ".mp3"
+
+bool debug = false;
+
+bool 
+is_format(const char* name, const char* newformat);
+
+void 
+print_debug(const char* restrict where, const char* restrict  msg);
 
 int 
-main(int argc, char *argv[]){
+main(int argc, char **argv){
+
+	char* newformat = FORMAT;     // Add tail original name.
+	int8_t cpu_max = CPU_MAX;     // Cpu jobs;
+
+
     int status;
-    int run = 0;
-    char tmp_str[MAX_SIMBOL];
+    int jobs = 0;
+    char new_name[BUFF];
     pid_t pid;
 
+
+	if(argc < 2)
+	{
+		printf("Using: %s filename\n", *argv);
+		exit(1);
+	}
+
+	argv++;
+	
     while(*argv)
     {
-        if (run < CPU_MAX)
+
+        if (jobs < cpu_max)
         {
+		    if (is_format(*argv, newformat))
+			{
+				print_debug("check mp3", "is mp3");
+				argv++;
+				continue;
+     		}
+
             if((pid = fork()) < 0)
             {
-                printf("error create fork!");
+                fprintf(stderr, "error create fork!");
                 exit(1);
             }
 
-            argv++;
             if(!pid)
             {
-                strcat(tmp_str, *argv);
-                strcat(tmp_str, NEWFORMAT);
+				strcat(new_name, *argv);
+				strcat(new_name, newformat);
 
                 execlp("ffmpeg", "ffmpeg", "-hide_banner", 
-                "-loglevel", "-8", "-i", *argv, tmp_str, (char*)NULL);
+                "-loglevel", "-8", "-i", *argv, new_name, (char*)NULL);
                 
                 exit(0);
             }
 
-            run++; // Parent
-        }
+            jobs++; // Parent
+			argv++;
+		}
         else if(wait(&status))
         /* If the are no free CPU we are waiting for the first free.   */
         {
-            run--;
+            jobs--;
         }
         
     }
     exit(0);
+}
+
+bool is_format(const char* restrict name, const char* restrict newformat){
+	if(strcmp(&name[strlen(name)-strlen(newformat)], newformat) == 0)
+	{
+		print_debug("name is_format()", name);
+	    return true;
+	}
+	print_debug("name !is_format()", name);
+	return false;
+}
+
+void print_debug(const char* restrict where, const char* restrict msg){
+	if(debug)
+	    printf("%s: %s\n", where, msg);
 }
