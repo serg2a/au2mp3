@@ -39,8 +39,8 @@ main(int argc, char **argv){
 
     if(argc < 2)
     {
-	    printf("Using: %s filename\n", *argv);
-	    exit(1);
+	printf("Using: %s filename\n", *argv);
+	exit(1);
     }
 
     argv++;
