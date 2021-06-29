@@ -9,9 +9,10 @@
 #include <string.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <limits.h>
 
 #define BUFF 255
-#define CPU_MAX sysconf(_SC_STREAM_MAX)
+#define CPU_MAX sysconf(_SC_NPROCESSORS_ONLN)
 #define FORMAT ".mp3"
 
 bool debug = false;
@@ -25,8 +26,8 @@ print_debug(const char* restrict where, const char* restrict  msg);
 int 
 main(int argc, char **argv){
 
-	char* newformat = FORMAT;     // Add tail original name.
-	int8_t cpu_max = CPU_MAX;     // Cpu jobs;
+    char* newformat = FORMAT;     // Add tail original name.
+    int8_t cpu_max = CPU_MAX;     // Cpu jobs;
 
 
     int status;
@@ -34,26 +35,27 @@ main(int argc, char **argv){
     char new_name[BUFF];
     pid_t pid;
 
+    printf("max cpu: %d\n", cpu_max);
 
-	if(argc < 2)
-	{
-		printf("Using: %s filename\n", *argv);
-		exit(1);
-	}
+    if(argc < 2)
+    {
+	    printf("Using: %s filename\n", *argv);
+	    exit(1);
+    }
 
-	argv++;
+    argv++;
 	
     while(*argv)
     {
 
         if (jobs < cpu_max)
         {
-		    if (is_format(*argv, newformat))
-			{
-				print_debug("check mp3", "is mp3");
-				argv++;
-				continue;
-     		}
+	    if (is_format(*argv, newformat))
+	    {
+		print_debug("check mp3", "is mp3");
+		argv++;
+		continue;
+	    }
 
             if((pid = fork()) < 0)
             {
@@ -63,8 +65,8 @@ main(int argc, char **argv){
 
             if(!pid)
             {
-				strcat(new_name, *argv);
-				strcat(new_name, newformat);
+		strcat(new_name, *argv);
+		strcat(new_name, newformat);
 
                 execlp("ffmpeg", "ffmpeg", "-hide_banner", 
                 "-loglevel", "-8", "-i", *argv, new_name, (char*)NULL);
@@ -73,8 +75,8 @@ main(int argc, char **argv){
             }
 
             jobs++; // Parent
-			argv++;
-		}
+	    argv++;
+	}
         else if(wait(&status))
         /* If the are no free CPU we are waiting for the first free.   */
         {
@@ -86,16 +88,16 @@ main(int argc, char **argv){
 }
 
 bool is_format(const char* restrict name, const char* restrict newformat){
-	if(strcmp(&name[strlen(name)-strlen(newformat)], newformat) == 0)
-	{
-		print_debug("name is_format()", name);
-	    return true;
-	}
-	print_debug("name !is_format()", name);
-	return false;
+    if(strcmp(&name[strlen(name)-strlen(newformat)], newformat) == 0)
+    {
+	    print_debug("name is_format()", name);
+	return true;
+    }
+    print_debug("name !is_format()", name);
+    return false;
 }
 
 void print_debug(const char* restrict where, const char* restrict msg){
-	if(debug)
-	    printf("%s: %s\n", where, msg);
+    if(debug)
+	printf("%s: %s\n", where, msg);
 }
