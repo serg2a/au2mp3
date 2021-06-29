@@ -29,13 +29,11 @@ main(int argc, char **argv){
     char* newformat = FORMAT;     // Add tail original name.
     int8_t cpu_max = CPU_MAX;     // Cpu jobs;
 
-
     int status;
     int jobs = 0;
     char new_name[BUFF];
     pid_t pid;
 
-    printf("max cpu: %d\n", cpu_max);
 
     if(argc < 2)
     {
@@ -44,7 +42,6 @@ main(int argc, char **argv){
     }
 
     argv++;
-	
     while(*argv)
     {
 
@@ -88,9 +85,9 @@ main(int argc, char **argv){
 }
 
 bool is_format(const char* restrict name, const char* restrict newformat){
-    if(strcmp(&name[strlen(name)-strlen(newformat)], newformat) == 0)
+    if(!strcmp(&name[strlen(name)-strlen(newformat)], newformat))
     {
-	    print_debug("name is_format()", name);
+	print_debug("name is_format()", name);
 	return true;
     }
     print_debug("name !is_format()", name);
