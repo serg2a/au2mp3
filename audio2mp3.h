@@ -11,14 +11,17 @@
 #include <unistd.h>
 #include <limits.h>
 
-#define BUFF 255
+#define BUFF 1024 
 #define FORMAT ".mp3"
+
+bool debug;
 
 struct s_au2mp3
 {
-    char* list_file[1024];  //FIXME!!! auto or argc!
-    char* newformat;   // Add tail original name.
-    int cpu_max;    // Using CPU.
+    char* value[BUFF];
+    char* newformat;
+    char* app;
+    int cpu_max; 
 } au2mp3;
 
 bool 
@@ -27,19 +30,14 @@ is_format(const char* name, const char* newformat);
 void 
 print_debug(const char* restrict where, const char* restrict  msg);
 
+void init_au2mp3(char **argv);
 // Getting structure s_au2mp3.
-void init_au2mp3(void);
 int get_cpu_max(void);
 char* get_format(void);
-char** get_list_file(void);
+char** get_list(void);
 
 // Setting structure s_au2mp3.
 void set_cpu_max(int cpu_max);
 void set_format(char* newfromat);
-void set_list_file(char* name);
 
-// Test structure s_au2mp3.
-bool test_cpu_max(void);
-bool test_format(void);
-bool test_list_file(void);
 #endif

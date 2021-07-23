@@ -4,20 +4,8 @@
 
 #include "audio2mp3.h"
 
-bool debug = false;
-
-
 int 
 main(int argc, char **argv){
-
-    int status;
-    int jobs = 0;
-    char new_name[BUFF];
-    pid_t pid;
-
-    init_au2mp3();
-    char* newformat = get_format();
-    int cpu_max = get_cpu_max();
 
     if(argc < 2)
     {
@@ -25,16 +13,24 @@ main(int argc, char **argv){
         exit(1);
     }
 
-    argv++; // Skip name program.
+    int status;
+    int jobs = 0;
+    char new_name[BUFF];
+    pid_t pid;
 
-    while(*argv)
+    init_au2mp3(argv);
+    char* newformat = get_format();
+    int cpu_max = get_cpu_max();
+    char** value = get_list();
+
+    while(*value)
     {
         if (jobs < cpu_max)
         {
-            if (is_format(*argv, newformat))
+            if (is_format(*value, newformat))
             {
                 print_debug("check mp3", "is mp3");
-                argv++;  // Next file name.
+                value++;  // Next file name.
                 continue;
             }
 
@@ -46,17 +42,17 @@ main(int argc, char **argv){
 
             if(!pid) // Children.
             {
-                strcat(new_name, *argv);
+                strcat(new_name, *value);
                 strcat(new_name, newformat);
 
                 execlp("ffmpeg", "ffmpeg", "-hide_banner", 
-                "-loglevel", "-8", "-i", *argv, new_name, (char*)NULL);
+                "-loglevel", "-8", "-i", *value, new_name, (char*)NULL);
                 
                 exit(0);
             }
 
             jobs++; // Parent.
-            argv++; // Next file name.
+            value++; // Next file name.
         }
         else if(wait(&status))
         /* If the are no free CPU we are waiting for the first free.   */
