@@ -5,9 +5,9 @@ you need to install [ffmpeg](https://ffmpeg.org/download.html
 
 	Using ffmpg in multiprocess, input list files:
 ## **make**
-> git clone https://github.com/serg2a/audio2mp3.git
+git clone https://github.com/serg2a/audio2mp3.git
 > cd audio2mp3
-> make
+make
 
 ### **example:**
 convert and crate file1.mp3 file2.mp3 file3.mp3
