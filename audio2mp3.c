@@ -1,48 +1,26 @@
 /* audio2mp3.c - audio2mp3 application.   */
 /* Author: S. A. Kravchuk 2021.           */
+/* License: GPLv3                         */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <string.h>
-#include <stdbool.h>
-#include <unistd.h>
-#include <limits.h>
-
-#define BUFF 255
-#define FORMAT ".mp3"
+#include "audio2mp3.h"
 
 bool debug = false;
 
-bool 
-is_format(const char* name, const char* newformat);
-
-void 
-print_debug(const char* restrict where, const char* restrict  msg);
 
 int 
 main(int argc, char **argv){
-
-    /*  FIXME!!! Add argv! 
-     *  "-f format", 
-     *  "-j CPU count", 
-     *  "-p program name and argv".   
-     *  
-     *  And add wait exit program.   */
-
-    char* newformat = FORMAT;   // Add tail original name.
-    int8_t cpu_max = sysconf(_SC_NPROCESSORS_ONLN);   // Using CPU.
 
     int status;
     int jobs = 0;
     char new_name[BUFF];
     pid_t pid;
 
+    init_au2mp3();
+    char* newformat = get_format();
+    int cpu_max = get_cpu_max();
+
     if(argc < 2)
     {
-        printf("CPU: %d\n----\n", cpu_max);
         printf("Using: %s filename\n", *argv);
         exit(1);
     }
@@ -51,7 +29,6 @@ main(int argc, char **argv){
 
     while(*argv)
     {
-
         if (jobs < cpu_max)
         {
             if (is_format(*argv, newformat))
@@ -97,7 +74,7 @@ bool is_format(const char* restrict name, const char* restrict newformat){
         print_debug("name is_format()", name);
         return true;
     }
-    print_debug("name !is_format()", name);
+    print_debug("name not is_format()", name);
     return false;
 }
 
