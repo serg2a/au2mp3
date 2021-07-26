@@ -19,6 +19,15 @@ void set_cpu(int cpu_max){au2mp3.cpu_max = (cpu_max)?cpu_max:CPU_MAX;}
 void set_format(char* format){au2mp3.newformat = format;}
 void set_app(char* app){au2mp3.app = app;}
 
+void usage(char* name){
+    printf("Using: %s filename\n", name);
+    printf("----\nKey:\n \
+    -j cpu max\n \
+    -f format\n \
+    -p application\n \
+    -v debug print\n");
+}
+
 static void 
 set_list(char** const argv){
     /*   Key:
@@ -32,44 +41,46 @@ set_list(char** const argv){
 
     while(*++_argv){
         if(**_argv == '-'){
+
             ++*_argv;
+	    switch(**_argv){
+		case 'j': 
+                    print_debug("cpu_max", "on");
 
-	    /*   Set max cpu   */
-            if(**_argv == 'j'){ 
-                print_debug("cpu_max", "on");
+		    if (atoi(++*_argv)) 
+			set_cpu(atoi(*_argv));
+		    else if (*++_argv)
+		        set_cpu(atoi(*_argv));
+		    else{
+			set_cpu(CPU_MAX);
+		        _argv--;
+		    }
+		    break;
 
-	        (atoi(++*_argv)) ? set_cpu(atoi(*_argv)):
-	                           set_cpu(atoi(*++_argv));
+                case 'p':
+		    print_debug("app", "on");
 
-		(*_argv)?_argv:--_argv;
-	    }
+		    (strlen(*_argv) > 1) ? set_app(++*_argv):
+					   set_app(*++_argv);
+		    if (!*_argv) --_argv;
+		    break;
 
-	    /*   Set program name   */
-            else if(**_argv == 'p'){
-                print_debug("app", "on");
+		case 'f':
+		    print_debug("format", "on");
 
-                (strlen(*_argv) > 1) ? set_app(++*_argv):
-		                       set_app(*++_argv);
+		    (strlen(*_argv) > 1) ? set_format(++*_argv):
+					   set_format(*++_argv);
 
-		(*_argv)?_argv:--_argv;
-            }
+		    if (!*_argv) --_argv;
+		    break;
 
-	    /*   Set new format   */
-            else if(**_argv == 'f'){
-                print_debug("format", "on");
+		case 'v':
+		    printf("Debug: on");
+		    debug = true;
+		    break;
 
-                (strlen(*_argv) > 1) ? set_format(++*_argv):
-		                       set_format(*++_argv);
-
-		(*_argv)?_argv:--_argv;
-            }
-
-	    /*   Enable debug print   */
-            else if(**_argv == 'v'){
-                printf("Debug: on");
-                debug = true;
-
-		(*_argv)?_argv:--_argv;
+		case 'h':
+		    usage(_argv[0]);
             }
 
         } else {// Value 

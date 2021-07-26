@@ -32,6 +32,9 @@ is_format(char* const  name, char* const newformat);
 void 
 print_debug(char* const where, char* const msg);
 
+void
+usage(char* name);
+
 void init_au2mp3(char **argv);
 // Getting structure s_au2mp3.
 int get_cpu(void);

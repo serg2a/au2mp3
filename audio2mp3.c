@@ -7,17 +7,9 @@
 int 
 main(int argc, char **argv){
 
-    if(argc < 2)
-    {
-        printf("Using: %s filename\n", *argv);
-	printf("----\nKey:\n \
-   -j cpu max\n \
-   -f format\n \
-   -p application\n \
-   -v debug print\n"
-	);
-
-        exit(1);
+    if(argc < 2){
+        usage(*argv);
+        exit(0);
     }
 
     int status;
@@ -26,6 +18,7 @@ main(int argc, char **argv){
     pid_t pid;
 
     init_au2mp3(argv);
+
     char* newformat = get_format();
     int cpu_max = get_cpu();
     char** value = get_list();
