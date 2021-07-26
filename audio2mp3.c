@@ -1,4 +1,4 @@
-/* audio2mp3.c - audio2mp3 application.   */
+/* audio2mp3.c -audio2mp3 application.   */
 /* Author: S. A. Kravchuk 2021.           */
 /* License: GPLv3                         */
 
@@ -10,6 +10,13 @@ main(int argc, char **argv){
     if(argc < 2)
     {
         printf("Using: %s filename\n", *argv);
+	printf("----\nKey:\n \
+   -j cpu max\n \
+   -f format\n \
+   -p application\n \
+   -v debug print\n"
+	);
+
         exit(1);
     }
 
@@ -20,8 +27,9 @@ main(int argc, char **argv){
 
     init_au2mp3(argv);
     char* newformat = get_format();
-    int cpu_max = get_cpu_max();
+    int cpu_max = get_cpu();
     char** value = get_list();
+    char* app = get_app();
 
     while(*value)
     {
@@ -29,7 +37,6 @@ main(int argc, char **argv){
         {
             if (is_format(*value, newformat))
             {
-                print_debug("check mp3", "is mp3");
                 value++;  // Next file name.
                 continue;
             }
@@ -45,8 +52,17 @@ main(int argc, char **argv){
                 strcat(new_name, *value);
                 strcat(new_name, newformat);
 
-                execlp("ffmpeg", "ffmpeg", "-hide_banner", 
-                "-loglevel", "-8", "-i", *value, new_name, (char*)NULL);
+		char* app_arg[] = {
+		    "-hide_banner",
+		    "-loglevel",
+		    "-8",
+		    "-i",
+		    *value,
+		    new_name,
+		    (char*) NULL
+		};
+
+                execvp(app, app_arg);
                 
                 exit(0);
             }
@@ -62,20 +78,4 @@ main(int argc, char **argv){
         
     }
     exit(0);
-}
-
-bool is_format(const char* restrict name, const char* restrict newformat){
-    if(!strcmp(&name[strlen(name)-strlen(newformat)], newformat))
-    {
-        print_debug("name is_format()", name);
-        return true;
-    }
-    print_debug("name not is_format()", name);
-    return false;
-}
-
-void print_debug(const char* restrict where, const char* restrict msg){
-    /*  FIXME!!! Include stdarg.h using "..." and other value   */
-    if(debug)
-        printf("%s: %s\n", where, msg);
 }
