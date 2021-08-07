@@ -7,10 +7,10 @@
 int 
 main(int argc, char **argv){
 
-    if(argc < 2){
-        usage(*argv);
-        exit(0);
-    }
+    set_name("audio2mp3");
+
+    if(argc < 2)
+        usage();
 
     int status;
     int jobs = 0;
@@ -30,17 +30,18 @@ main(int argc, char **argv){
         {
             if (is_format(*value, newformat))
             {
-                value++;  // Next file name.
+                value++;  /*   No need to precode, next file.   */
                 continue;
             }
 
             if((pid = fork()) < 0)
             {
-                fprintf(stderr, "error create fork!");
+		errno = 0;
+                fprintf(stderr, "error create fork!:%s", strerror(errno));
                 exit(1);
             }
 
-            if(!pid) // Children.
+            if(!pid) /*   Children.   */
             {
                 strcat(new_name, *value);
                 strcat(new_name, newformat);
@@ -60,8 +61,8 @@ main(int argc, char **argv){
                 exit(0);
             }
 
-            jobs++; // Parent.
-            value++; // Next file name.
+            jobs++; /*   Parent.   */
+            value++; /*   Next file.   */
         }
         else if(wait(&status))
         /* If the are no free CPU we are waiting for the first free.   */

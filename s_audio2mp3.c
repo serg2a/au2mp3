@@ -1,6 +1,7 @@
 #include "audio2mp3.h"
 
 
+static char prog_name[BUFF];
 static void set_list(char** const argv);
 
 void init_au2mp3(char** const argv){
@@ -19,13 +20,21 @@ void set_cpu(int cpu_max){au2mp3.cpu_max = (cpu_max)?cpu_max:CPU_MAX;}
 void set_format(char* format){au2mp3.newformat = format;}
 void set_app(char* app){au2mp3.app = app;}
 
-void usage(char* name){
-    printf("Using: %s filename\n", name);
-    printf("----\nKey:\n \
-    -j cpu max\n \
-    -f format\n \
-    -p application\n \
-    -v debug print\n");
+void set_name(char *_name){
+    strcpy(prog_name, _name);
+}
+char* get_name(void){
+    return prog_name;
+}
+
+void usage(void){
+    printf("Using: %s filename\n"
+           "----\nKey:\n"
+    	   "\t-j cpu max\n"
+           "\t-f format\n"
+           "\t-p application\n"
+           "\t-v debug print\n", get_name());
+    exit(-1);
 }
 
 static void 
@@ -80,14 +89,14 @@ set_list(char** const argv){
 		    break;
 
 		case 'h':
-		    usage(_argv[0]);
+		    usage();
             }
 
-        } else {// Value 
+        } else {/*   Value   */ 
             *name = *_argv;
             name++;
         }
-     } // End while.
+     } /*   End while.   */
 }
 
 bool is_format(char* const restrict name, char* const restrict newformat){
@@ -101,7 +110,6 @@ bool is_format(char* const restrict name, char* const restrict newformat){
 }
 
 void print_debug(char* const restrict where, char* const restrict msg){
-    /*  FIXME!!! Include stdarg.h using "..." and other value   */
     if(debug)
         printf("%s: %s\n", where, msg);
 }

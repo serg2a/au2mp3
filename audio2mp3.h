@@ -10,6 +10,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <limits.h>
+#include <errno.h>
 
 #define BUFF 1024 
 #define FORMAT ".mp3"
@@ -33,7 +34,7 @@ void
 print_debug(char* const where, char* const msg);
 
 void
-usage(char* name);
+usage(void);
 
 void init_au2mp3(char **argv);
 // Getting structure s_au2mp3.
@@ -41,10 +42,12 @@ int get_cpu(void);
 char* get_format(void);
 char** get_list(void);
 char* get_app(void);
+char* get_name(void);
 
 // Setting structure s_au2mp3.
 void set_cpu(int cpu_max);
 void set_format(char* newfromat);
 void set_app(char* app);
+void set_name(char*);
 
 #endif
