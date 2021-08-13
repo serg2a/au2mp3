@@ -1,17 +1,18 @@
 APP = au2mp3
 BINPATH = ~/bin/
 CC = clang 
-FLAG = -Wall -std=c11
-TEST = test
+FLAG = -Wall -std=c11 -I include
+TEST = test_au2mp3
+SRC = src/
 
 audio2mp3: s_audio2mp3.o audio2mp3.o
 	$(CC) $(FLAG) audio2mp3.o s_audio2mp3.o -o $(APP)
 
-audio2mp3.o: audio2mp3.c
-	$(CC) $(FLAG) -c audio2mp3.c
+audio2mp3.o: src/audio2mp3.c
+	$(CC) $(FLAG) -c $(SRC)audio2mp3.c
 
-s_audio2mp3.o: s_audio2mp3.c
-	$(CC) $(FLAG) -c s_audio2mp3.c
+s_audio2mp3.o: src/s_audio2mp3.c
+	$(CC) $(FLAG) -c $(SRC)s_audio2mp3.c
 
 clean:
 	rm $(APP) s_audio2mp3.o test.o audio2mp3.o $(TEST)
@@ -23,8 +24,8 @@ install: audio2mp3
 test: s_audio2mp3.o test.o
 	$(CC) $(FLAG) s_audio2mp3.o test.o -o $(TEST)
 
-test.o: test.c
-	$(CC) $(FLAG) -c test.c
+test.o: test/test.c
+	$(CC) $(FLAG) -c test/test.c
 
 unistall:
 	rm $(BINPATH)$(APP)
