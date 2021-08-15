@@ -30,15 +30,15 @@ main(int argc, char **argv){
         {
             if (is_format(*value, newformat))
             {
+                print_debug("skip format: ", *value); 
                 value++;  /*   No need to precode, next file.   */
                 continue;
             }
 
+	    errno = 0;
             if((pid = fork()) < 0)
             {
-		errno = 0;
-                fprintf(stderr, "error create fork!:%s", strerror(errno));
-                exit(1);
+                perror("Error fork (create new process)");
             }
 
             if(!pid) /*   Children.   */
@@ -57,8 +57,7 @@ main(int argc, char **argv){
 		};
 
                 execvp(app, app_arg);
-                
-                exit(0);
+                perror("error call ffmpeg (transcoding)"); 
             }
 
             jobs++; /*   Parent.   */
