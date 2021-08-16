@@ -1,5 +1,36 @@
 audio2mp3
 ========
+Скачивая аудио поток с [youtube](https://youtube.com "youtube")
+С помощь [youtubei-dl](https://github.com/ytdl-org/youtube-dl "youtube-dl")
+
+Нужны были mp3 а не m4a. Была написана программа для кодирования на всех потоках.
+
+Для работы необходима установка: [ffmpeg](https://ffmpeg.org/download.html 
+"Dowonload ffmpeg")
+>Debian:
+```
+# apt install ffmpeg git
+```
+
+### **Установка
+```
+git clone https://github.com/serg2a/audio2mp3.git
+cd audio2mp3
+make install
+```
+Копирует au2mp3 в ~/bin 
+
+### **Использование**
+```
+$ au2mp3 file1.mp3 file2.mp3
+```
+или
+```
+$ au2mp3 *
+```
+
+English
+-------
 Need to install [ffmpeg](https://ffmpeg.org/download.html 
 "Dowonload ffmpeg")
 
