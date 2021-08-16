@@ -8,7 +8,7 @@ c помощь [youtube-dl](https://github.com/ytdl-org/youtube-dl "youtube-dl")
 
 Для работы необходима установка: [ffmpeg](https://ffmpeg.org/download.html 
 "Dowonload ffmpeg")
->Debian:
+### Debian:
 ```
 # apt install ffmpeg
 ```
@@ -29,7 +29,7 @@ $ au2mp3 file1.mp3 file2.mp3
 ```
 $ au2mp3 *
 ```
-##### Получаем файлы mp3 там где вызвали au2mp3.
+> Получаем файлы mp3 там где вызвали au2mp3.
 
 
 English
