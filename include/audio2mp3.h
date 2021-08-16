@@ -1,53 +1,43 @@
 #ifndef AU2MP3
 #define AU2MP3
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <string.h>
 #include <stdbool.h>
 #include <unistd.h>
-#include <limits.h>
-#include <errno.h>
 
 #define BUFF 1024 
 #define FORMAT ".mp3"
 #define APP "ffmpeg"
 #define CPU_MAX sysconf(_SC_NPROCESSORS_ONLN) 
 
-bool debug;
-
-struct s_au2mp3
-{
+struct s_au2mp3{
     char* value[BUFF];
     char* newformat;
     char* app;
-    int cpu_max; 
-} au2mp3;
+    int cpu_max;
+};
+extern struct s_au2mp3 au2mp3;
 
-bool 
+extern bool 
 is_format(char* const  name, char* const newformat);
 
-void 
+extern void 
 print_debug(char* const where, char* const msg);
 
-void
+extern void
 usage(void);
 
-void init_au2mp3(char **argv);
+extern void init_au2mp3(char **argv);
 // Getting structure s_au2mp3.
-int get_cpu(void);
-char* get_format(void);
-char** get_list(void);
-char* get_app(void);
-char* get_name(void);
+extern int get_cpu(void);
+extern char* get_format(void);
+extern char** get_list(void);
+extern char* get_app(void);
+extern char* get_name(void);
 
 // Setting structure s_au2mp3.
-void set_cpu(int cpu_max);
-void set_format(char* newfromat);
-void set_app(char* app);
-void set_name(char*);
-
+extern void set_cpu(int cpu_max);
+extern void set_format(char* newfromat);
+extern void set_app(char* app);
+extern void set_name(char*);
+extern void set_list(char** const argv);
 #endif

@@ -2,6 +2,17 @@
 /* Author: S. A. Kravchuk 2021.           */
 /* License: GPLv3                         */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <string.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <limits.h>
+#include <errno.h>
+
 #include "audio2mp3.h"
 
 int 
@@ -35,7 +46,7 @@ main(int argc, char **argv){
                 continue;
             }
 
-	    errno = 0;
+	        errno = 0;
             if((pid = fork()) < 0)
             {
                 perror("Error fork (create new process)");
@@ -46,15 +57,15 @@ main(int argc, char **argv){
                 strcat(new_name, *value);
                 strcat(new_name, newformat);
 
-		char* app_arg[] = {
-		    "-hide_banner",
-		    "-loglevel",
-		    "-8",
-		    "-i",
-		    *value,
-		    new_name,
-		    (char*) NULL
-		};
+            char* app_arg[] = {
+                "-hide_banner",
+                "-loglevel",
+                "-8",
+                "-i",
+                *value,
+                new_name,
+                (char*) NULL
+            };
 
                 execvp(app, app_arg);
                 perror("error call ffmpeg (transcoding)"); 
@@ -70,5 +81,5 @@ main(int argc, char **argv){
         }
         
     }
-    exit(0);
+    exit(EXIT_SUCCESS);
 }
