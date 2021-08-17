@@ -14,6 +14,7 @@
 #include <errno.h>
 
 #include "audio2mp3.h"
+#include "s_audio2mp3.h"
 
 int 
 main(int argc, char **argv){

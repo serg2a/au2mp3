@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "audio2mp3.h"
+#include "s_audio2mp3.h"
 
 extern void debugs(void);
 

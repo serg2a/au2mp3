@@ -1,8 +1,5 @@
 #include "audio2mp3.h"
-
-extern void set_list(char** const argv);
-
-struct s_au2mp3 au2mp3;
+#include "s_audio2mp3.h"
 
 void init_au2mp3(char** const argv){
     set_cpu(CPU_MAX); 
