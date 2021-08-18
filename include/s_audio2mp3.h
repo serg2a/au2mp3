@@ -1,6 +1,8 @@
 #ifndef S_AU2MP3
 #define S_AU2MP3
 
+#include <unistd.h>
+
 #define CPU_MAX sysconf(_SC_NPROCESSORS_ONLN) 
 
 struct s_au2mp3{
