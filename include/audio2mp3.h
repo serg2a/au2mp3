@@ -2,7 +2,6 @@
 #define AU2MP3
 
 #include <stdbool.h>
-#include <unistd.h>
 
 #define FORMAT ".mp3"
 #define APP "ffmpeg"
