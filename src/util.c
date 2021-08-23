@@ -1,10 +1,16 @@
+#ifndef _UTIL
+#define _UTIL
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
-#include "audio2mp3.h"
+#define _BUFF 255
 
-static char prog_name[BUFF];
+void print_debug(char* const restrict where, char* const restrict msg);
+
+static char prog_name[_BUFF];
 static bool debug = false;
 
 void set_name(char *_name){
@@ -41,3 +47,5 @@ void print_debug(char* const restrict where, char* const restrict msg){
     if(debug)
         printf("%s: %s\n", where, msg);
 }
+
+#endif
