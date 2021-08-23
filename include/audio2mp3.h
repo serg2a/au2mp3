@@ -2,7 +2,6 @@
 #define AU2MP3
 
 #include <stdbool.h>
-#include <unistd.h>
 
 enum { BUFF = 1024 };
 
