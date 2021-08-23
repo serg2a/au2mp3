@@ -4,10 +4,8 @@
 #include <stdbool.h>
 #include <unistd.h>
 
-#define FORMAT ".mp3"
-#define APP "ffmpeg"
-
 enum { BUFF = 1024 };
+
 extern bool 
 is_format(char* const  name, char* const newformat);
 

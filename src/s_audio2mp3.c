@@ -3,8 +3,6 @@
 
 void init_au2mp3(char** const argv){
     set_cpu(CPU_MAX); 
-    set_app(APP);
-    set_format(FORMAT);
     set_list(argv);
 }
 

@@ -25,7 +25,7 @@ clean:
 	
 install: audio2mp3
 	cp $(APP) $(BINPATH)
-	rm $(APP)
+	make clean
 
 test: s_audio2mp3.o test.o
 	$(CC) $(FLAG) s_audio2mp3.o test.o -o $(TEST)
