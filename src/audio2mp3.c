@@ -59,6 +59,7 @@ main(int argc, char **argv){
 
             if(!pid) /*   Children.   */
             {
+		memset(new_name, 0, BUFF);
                 strcat(new_name, *value);
                 strcat(new_name, newformat);
 
