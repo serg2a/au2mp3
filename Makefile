@@ -1,37 +1,28 @@
-APP = au2mp3
-BINPATH = ~/bin/
-CC = clang 
-FLAG = -Wall -std=c11 -I include
-TEST = test_au2mp3
-SRC = src/
+CC := gcc
+TARGET_EXEC := au2mp3 
+BUILD_DIR := ./build
+SRC_DIRS := ./src
+INCLUDE_DIR := ./include
+BIN_DIR := ~/bin/
 
-audio2mp3: s_audio2mp3.o audio2mp3.o util.o setlist.o
-	$(CC) $(FLAG) audio2mp3.o s_audio2mp3.o util.o setlist.o -o $(APP)
+SRCS := $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c)
+OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 
-audio2mp3.o: src/audio2mp3.c
-	$(CC) $(FLAG) -c $(SRC)audio2mp3.c
+CPPFLAGS := -I $(INCLUDE_DIR)
 
-s_audio2mp3.o: src/s_audio2mp3.c
-	$(CC) $(FLAG) -c $(SRC)s_audio2mp3.c
+$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
+	$(CC) $(OBJS) -o $@
 
-util.o: src/util.c
-	$(CC) $(FLAG) -c $(SRC)util.c
+$(BUILD_DIR)/%.c.o: %.c
+	mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) -c $< -o $@
 
-setlist.o: src/setlist.c
-	$(CC) $(FLAG) -c $(SRC)setlist.c
+install: $(BUILD_DIR)/$(TARGET_EXEC)
+	cp $< $(BIN_DIR)
 
+uninstall: $(BIN_DIR)/$(TARGET_EXEC)
+	rm -r $<
+
+.PHONY: clean
 clean:
-	rm $(APP) s_audio2mp3.o test.o audio2mp3.o util.o setlist.o $(TEST)
-	
-install: audio2mp3
-	cp $(APP) $(BINPATH)
-	make clean
-
-test: s_audio2mp3.o test.o
-	$(CC) $(FLAG) s_audio2mp3.o test.o -o $(TEST)
-
-test.o: test/test.c
-	$(CC) $(FLAG) -c test/test.c
-
-unistall:
-	rm $(BINPATH)$(APP)
+	rm -r $(BUILD_DIR)
