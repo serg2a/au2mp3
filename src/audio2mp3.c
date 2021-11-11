@@ -1,6 +1,22 @@
-/* audio2mp3.c -audio2mp3 application.   */
-/* Author: S. A. Kravchuk 2021.           */
-/* License: GPLv3                         */
+/* This file is part of audio2mp3.
+
+    audio2mp3 is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    audio2mp3 is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with audio2mp3.  If not, see <https://www.gnu.org/licenses/>.
+
+    Author  : S. A. Kravchuk 2021.
+    email   : serg2ak@ya.ru
+    License : GPLv3                         
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
