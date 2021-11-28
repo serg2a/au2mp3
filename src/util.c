@@ -67,5 +67,4 @@ void print_debug(char* const restrict where, char* const restrict msg){
     if(debug)
         printf("%s: %s\n", where, msg);
 }
-
 #endif

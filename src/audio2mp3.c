@@ -30,7 +30,6 @@
 #include <errno.h>
 
 #include "audio2mp3.h"
-#include "s_audio2mp3.h"
 
 #define APP "ffmpeg"
 #define FORMAT ".mp3"
@@ -75,7 +74,7 @@ main(int argc, char **argv){
 
             if(!pid) /*   Children.   */
             {
-		memset(new_name, 0, BUFF);
+		        memset(new_name, 0, BUFF);
                 strcat(new_name, *value);
                 strcat(new_name, newformat);
 
