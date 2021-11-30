@@ -26,11 +26,11 @@ struct s_au2mp3{
 extern void init_au2mp3(char **argv);
 
 /*   Getting structure s_au2mp3.   */
-extern const int get_cpu(void);
-extern const char* get_format(void);
+extern int get_cpu(void);
+extern char* get_format(void);
 extern char** get_list(void);
-extern const char* get_app(void);
-extern const char* get_name(void);
+extern char* get_app(void);
+extern char* get_name(void);
 
 /*   Setting structure s_au2mp3.   */
 extern void set_cpu(int cpu_max);
