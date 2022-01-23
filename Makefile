@@ -1,15 +1,16 @@
 CC := gcc
+
+INCLUDE_DIR := include
 CFLAGS := -I $(INCLUDE_DIR) -Wall -O2
 
 TARGET_EXEC := au2mp3 
 BUILD_DIR := build
 SRC_DIRS := src
-INCLUDE_DIR := include
 BIN_DIR := ~/bin/
 
 #SRCS := $(shell find . -name *.cpp -or -name *.c)
 
-SRCS := $(wildcard $(SRC_DIST)/*.c)
+SRCS := $(wildcard  $(SRC_DIRS)/*.c)
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
