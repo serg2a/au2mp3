@@ -1,5 +1,4 @@
-#ifndef AU2MP3
-#define AU2MP3
+#pragma once
 #define CPU_MAX sysconf(_SC_NPROCESSORS_ONLN) 
 
 #include <unistd.h>
@@ -38,5 +37,3 @@ extern void set_format(char* newfromat);
 extern void set_app(char* app);
 extern void set_name(char*);
 extern void set_list(char** const argv);
-
-#endif
