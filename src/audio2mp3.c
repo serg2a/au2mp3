@@ -32,7 +32,7 @@
 #include "audio2mp3.h"
 
 #define APP "ffmpeg"
-#define FORMAT ".mp3"
+#define FORMAT ".mov"
 
 int 
 main(int argc, char **argv){
@@ -43,7 +43,7 @@ main(int argc, char **argv){
 
     int status;
     int jobs = 0;
-    char new_name[BUFF];
+    char new_name[BUFF]; 
     pid_t pid;
 
     set_app(APP);
@@ -52,11 +52,11 @@ main(int argc, char **argv){
     init_au2mp3(argv);
 
     char* newformat = get_format();
-    int cpu_max = get_cpu();
-    char** value = get_list();
-    char* app = get_app();
+    int cpu_max     = get_cpu();
+    char** value    = get_list();
+    char* app       = get_app();
 
-    while(*value) /*   value != NULL   */
+    while(*value) /*   if value != NULL   */
     {
         if (jobs < cpu_max)
         {
@@ -77,7 +77,7 @@ main(int argc, char **argv){
 		        memset(new_name, 0, BUFF);
                 strcat(new_name, *value);
                 strcat(new_name, newformat);
-
+/*
                 char* app_arg[] = {
                     "-hide_banner",
                     "-loglevel", 
@@ -86,6 +86,20 @@ main(int argc, char **argv){
                     *value,
                     "-b:a", 
                     "192k", 
+                    new_name,
+                    (char*) NULL
+*/
+
+                char* app_arg[] = {
+                    "-hide_banner",
+                    "-loglevel", 
+                    "8",
+                    "-i",
+                    *value,
+                    "-c:a",
+                    "pcm_s32le",
+                    "-c:v",
+                    "copy",
                     new_name,
                     (char*) NULL
                 };
