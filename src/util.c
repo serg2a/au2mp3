@@ -17,10 +17,6 @@
     email   : serg2ak@ya.ru
     License : GPLv3                         
 */
-
-#ifndef _UTIL
-#define _UTIL
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,7 +29,7 @@ void print_debug(char* const restrict where, char* const restrict msg);
 static char prog_name[_BUFF];
 static bool debug = false;
 
-void set_name(char *_name){
+void set_name(const char *_name){
     strcpy(prog_name, _name);
 }
 
@@ -67,4 +63,3 @@ void print_debug(char* const restrict where, char* const restrict msg){
     if(debug)
         printf("%s: %s\n", where, msg);
 }
-#endif
