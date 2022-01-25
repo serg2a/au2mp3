@@ -1,6 +1,5 @@
-#pragma once
 #define CPU_MAX sysconf(_SC_NPROCESSORS_ONLN) 
-
+#define new
 #include <unistd.h>
 #include <stdbool.h>
 
@@ -8,7 +7,7 @@ enum { BUFF = 4096 };
 extern bool 
 is_format(char* const  name, char* const newformat);
 extern void 
-print_debug(char* const where, char* const msg);
+print_debug(char* const restrict where, char* const restrict msg);
 extern void
 usage(void);
 
