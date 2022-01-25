@@ -1,31 +1,22 @@
-CC := gcc
+CC 		:= gcc 
+CFLAGS 		:= -Wall -O2 
+APP		:= au2mp3 
+BUILD_DIR 	:= build
+SRC_DIR 	:= src
+BIN_DIR 	:= ~/bin/
+OBJS 		:= $(patsubst  %.c,%.o,$(wildcard $(SRC_DIR)/*.c))
+#-------------------------------------------------------------
 
-INCLUDE_DIR := include
-CFLAGS := -I $(INCLUDE_DIR) -Wall -O2
+$(BUILD_DIR)/$(APP): $(OBJS)
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) $^ -o $@
 
-TARGET_EXEC := au2mp3 
-BUILD_DIR := build
-SRC_DIRS := src
-BIN_DIR := ~/bin/
-
-#SRCS := $(shell find . -name *.cpp -or -name *.c)
-
-SRCS := $(wildcard  $(SRC_DIRS)/*.c)
-OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
-
-$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $@
-
-$(BUILD_DIR)/%.c.o: %.c
-	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-install: $(BUILD_DIR)/$(TARGET_EXEC)
+install: $(BUILD_DIR)/$(APP)
 	cp $< $(BIN_DIR)
 
-uninstall: $(BIN_DIR)/$(TARGET_EXEC)
+uninstall: $(BIN_DIR)/$(APP)
 	rm -r $<
 
 .PHONY: clean
 clean:
-	rm -r $(BUILD_DIR)
+	rm -rf $(SRC_DIR)/*.o $(BUILD_DIR)

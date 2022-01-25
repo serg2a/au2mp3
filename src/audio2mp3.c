@@ -93,11 +93,12 @@ main(int argc, char **argv){
                 char* app_arg[] = {
                     "-hide_banner",
                     "-loglevel", 
-                    "8",
+                    "error",
+                    "-n",
                     "-i",
                     *value,
                     "-c:a",
-                    "pcm_s32le",
+                    "pcm_s16le",
                     "-c:v",
                     "copy",
                     new_name,
@@ -107,7 +108,7 @@ main(int argc, char **argv){
                 execvp(app, app_arg);
                 perror("error call ffmpeg (transcoding)"); 
             }
-
+            print_debug("setlist",*value);
             jobs++;  /*   Parent.      */
             value++; /*   Next file.   */
         }

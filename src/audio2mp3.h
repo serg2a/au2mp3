@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <stdbool.h>
 
-enum { BUFF = 1024 };
+enum { BUFF = 4096 };
 extern bool 
 is_format(char* const  name, char* const newformat);
 extern void 
@@ -35,5 +35,5 @@ extern char* get_name(void);
 extern void set_cpu(int cpu_max);
 extern void set_format(char* newfromat);
 extern void set_app(char* app);
-extern void set_name(char*);
+extern void set_name(const char*);
 extern void set_list(char** const argv);

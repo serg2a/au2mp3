@@ -21,8 +21,34 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "audio2mp3.h"
 
 #define _BUFF 255
+
+void init_au2mp3(char** const argv){
+    set_cpu(CPU_MAX); 
+    set_list(argv);
+}
+
+void usage(void){
+    printf("Using: %s filename\n"
+           "----\nKey:\n"
+    	   "\t-j cpu max\n"
+           "\t-f format\n"
+           "\t-p application\n"
+           "\t-v debug print\n", get_name());
+    exit(EXIT_FAILURE);
+}
+
+int get_cpu(void){return au2mp3.cpu_max;}
+char* get_format(void){return au2mp3.newformat;}
+char* get_app(void){return au2mp3.app;}
+char** get_list(void){return au2mp3.value;}
+
+void set_cpu(int cpu_max){au2mp3.cpu_max = (cpu_max)?cpu_max:CPU_MAX;}
+void set_format(char* format){au2mp3.newformat = format;}
+void set_app(char* app){au2mp3.app = app;}
+
 
 void print_debug(char* const restrict where, char* const restrict msg);
 
@@ -35,16 +61,6 @@ void set_name(const char *_name){
 
 char* get_name(void){
     return prog_name;
-}
-
-void usage(void){
-    printf("Using: %s filename\n"
-           "----\nKey:\n"
-    	   "\t-j cpu max\n"
-           "\t-f format\n"
-           "\t-p application\n"
-           "\t-v debug print\n", get_name());
-    exit(EXIT_FAILURE);
 }
 
 bool is_format(char* const restrict name, char* const restrict newformat){
