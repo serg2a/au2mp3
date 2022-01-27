@@ -1,5 +1,4 @@
 #define CPU_MAX sysconf(_SC_NPROCESSORS_ONLN) 
-#define new
 #include <unistd.h>
 #include <stdbool.h>
 

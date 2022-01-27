@@ -67,14 +67,14 @@ main(int argc, char **argv){
                 continue;
             }
 
-	        errno = 0;
+	    errno = 0;
 
             if((pid = fork()) < 0)
                 perror("Error fork (create new process)");
 
             if(!pid) /*   Children.   */
             {
-		        memset(new_name, 0, BUFF);
+		memset(new_name, 0, BUFF);
                 strcat(new_name, *value);
                 strcat(new_name, newformat);
 /*
@@ -121,7 +121,7 @@ main(int argc, char **argv){
     }
 
     /*    Wait close jobs   */
-    while((jobs--) >= 0)
+    while(jobs--)
         wait(&status);
 
     exit(EXIT_SUCCESS);
