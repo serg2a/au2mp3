@@ -1,12 +1,14 @@
 CC 		:= cc
 CFLAGS 		:= -Wall -O2
+
+vpath %.h src %.s src
+
 APP		:= au2mp3 
 BUILD_DIR 	:= build
 SRC_DIR 	:= src
 BIN_DIR 	:= ~/bin/
 HEADER		:= audio2mp3.h
 OBJS 		:= $(patsubst  %.c,%.o,$(wildcard $(SRC_DIR)/*.c))
-vpath %.h src
 #-------------------------------------------------------------
 
 $(BUILD_DIR)/$(APP): $(OBJS)
