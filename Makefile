@@ -1,5 +1,5 @@
 CC 		:= cc
-CFLAGS 		:= -Wall -O2
+CFLAGS 		:= -Wall -O2 -g3
 
 vpath %.h src %.s src
 

@@ -25,9 +25,9 @@
 
 #define _BUFF 255
 
-void init_au2mp3(char** const argv){
+void init_au2mp3(int const argc, char** const argv){
     set_cpu(CPU_MAX); 
-    set_list(argv);
+    set_list(argc, argv);
 }
 
 void usage(void){
@@ -40,17 +40,14 @@ void usage(void){
     exit(EXIT_FAILURE);
 }
 
-int get_cpu(void){return au2mp3.cpu_max;}
-char* get_format(void){return au2mp3.newformat;}
-char* get_app(void){return au2mp3.app;}
+const int get_cpu(void){return au2mp3.cpu_max;}
+const char* get_format(void){return au2mp3.newformat;}
+const char* get_app(void){return au2mp3.app;}
 char** get_list(void){return au2mp3.value;}
 
 void set_cpu(int cpu_max){au2mp3.cpu_max = (cpu_max)?cpu_max:CPU_MAX;}
 void set_format(char* format){au2mp3.newformat = format;}
 void set_app(char* app){au2mp3.app = app;}
-
-
-void print_debug(char* const restrict where, char* const restrict msg);
 
 static char prog_name[_BUFF];
 static bool debug = false;
@@ -59,11 +56,11 @@ void set_name(const char *_name){
     strcpy(prog_name, _name);
 }
 
-char* get_name(void){
+const char* get_name(void){
     return prog_name;
 }
 
-bool is_format(char* const restrict name, char* const restrict newformat){
+bool is_format(const char* name, const char* newformat){
     if(!strcmp(&name[strlen(name)-strlen(newformat)], newformat))
     {
         print_debug("name is_format()", name);
@@ -75,7 +72,7 @@ bool is_format(char* const restrict name, char* const restrict newformat){
 
 void debugs(void){ debug = true; };
 
-void print_debug(char* const restrict where, char* const restrict msg){
+void print_debug(const char* where, const char* msg){
     if(debug)
         printf("%s: %s\n", where, msg);
 }

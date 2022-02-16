@@ -21,13 +21,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "audio2mp3.h"
+
 
 extern void debugs(void);
 
 void 
-set_list(char** const argv)
+set_list(int const argc, char** const argv)
 {
     /*   Key:
      *   -j max call programm 
@@ -35,51 +37,41 @@ set_list(char** const argv)
      *   -p call programm name
      *   -v enable debug priunt    */
 
-    char** name = au2mp3.value; 
-    char** _argv = argv;
+    int opt;
 
-    while(*++_argv){
-        if(**_argv == '-')
-        {
-            ++*_argv;
-            switch(**_argv){
-            case 'j': 
-                print_debug("cpu_max", "on");
-                if (atoi(++*_argv)) 
-                    set_cpu(atoi(*_argv));
-                else if (*++_argv)
-                    set_cpu(atoi(*_argv));
-                else{
-                    set_cpu(CPU_MAX);
-                    _argv--;
-                }
-                break;
+    while((opt = getopt(argc, argv, "j:f:p:v")) != -1)
+      switch (opt){
+        case 'j':
+	  print_debug("cpu_max", "on");
+          set_cpu(atoi(optarg));
+          break;
 
-            case 'p':
-                print_debug("app", "on");
-                (strlen(*_argv) > 1) ? set_app(++*_argv):set_app(*++_argv);
-                if (!*_argv) --_argv;
-                break;
+        case 'p':
+          print_debug("app", "on");
+          set_app(optarg);
+          break;
 
-            case 'f':
-                print_debug("format", "on");
-                (strlen(*_argv) > 1) ? set_format(++*_argv):set_format(*++_argv);
+        case 'f':
+          print_debug("format", "on");
+          set_format(optarg);
+          break;
 
-                if (!*_argv) --_argv;
-                break;
+        case 'v':
+          printf("Debug: on");
+          debugs();
+          break;
 
-            case 'v':
-                printf("Debug: on");
-                debugs();
-                break;
+        default:
+          usage();
+      }/*  end switch */
 
-            case 'h':
-                usage();
-            }/*  end switch */
-
-        } else {/*   Value   */ 
-            *name = *_argv;
-            name++;
-        }
-     } /*   End while.   */
+    if(optind >= argc){
+      fprintf(stderr, "Expected argument after options\n");
+      exit(EXIT_FAILURE);
+    };
+    
+    for(int i = optind; i <argc; i++) {
+      au2mp3.value[i-optind] = argv[i];
+    }
+    au2mp3.value[argc] = NULL;
 }
