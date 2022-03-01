@@ -35,3 +35,4 @@ extern void set_format(char* newfromat);
 extern void set_app(char* app);
 extern void set_name(const char*);
 extern void set_list(int const argc, char** const argv);
+extern bool redirect_oerror(const char* filename, int handle);
