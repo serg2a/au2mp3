@@ -28,50 +28,16 @@
 #include <unistd.h>
 #include <limits.h>
 #include <errno.h>
+#include <sys/prctl.h>
 
 #include "audio2mp3.h"
 
 #define APP "ffmpeg"
-#define FORMAT ".mp3" 
-#define DEFOPT "-hide_banner -loglevel error -n -i"
-#define LEN 255
-
-typedef struct {char str[BUFF]; } sstring;
-sstrintg app_arg[LEN];
-
-char** app_opt(const char* opt, char** app_arg)
-{
-  char** _app_arg = app_arg;
-  char value[LEN]; 
-  char* pvalue = value;
-
-  while(*opt++)
-    if(' ' == *opt){
-      *pvalue = '\0';
-      pvalue = value;
-      strcpy(*_app_arg++, pvalue);
-      bzero(pvalue, LEN);
-      continue;
-    } else
-        *pvalue++ = *opt;
-  
-  *_app_arg = NULL;
-  _app_arg = app_arg;
-  return _app_arg;
-};
-
-void print_value(char* opt, char** aarg){
- char** _app_arg = aarg; 
- app_opt(opt, _app_arg); 
- while(**_app_arg++)
-   printf("app_arg: %s\n", *_app_arg);
-}
+#define FORMAT "mp3" 
 
 int 
 main(int argc, char **argv)
 {
-    print_value(DEFOPT, aarg); 
-
     set_name("audio2mp3");
     if(argc < 2)
         usage();
@@ -92,6 +58,8 @@ main(int argc, char **argv)
     const char* app		= get_app();
 
 
+    if(prctl(PR_SET_CHILD_SUBREAPER, 1lu))
+	perror("prctl");
     while(*value) /*   if value != NULL   */
     {
         if (jobs < cpu_max)
@@ -105,14 +73,17 @@ main(int argc, char **argv)
 
 	    errno = 0;
 
-            if((pid = fork()) < 0)
+            if((pid = fork()) == -1)
                 perror("Error fork (create new process)");
 
             if(!pid) /*   Children.   */
             {
+                if(!redirect_oerror("out.log", STDOUT_FILENO) ||
+                   !redirect_oerror("err.log", STDERR_FILENO))
+                  fprintf(stderr,"redirect out children\n");
+
 		memset(new_name, 0, BUFF);
-                strcat(new_name, *value);
-                strcat(new_name, format);
+                sprintf(new_name, "%s.%s", *value, format);
 		
                 char* app_arg[] = {
                     "-hide_banner",
@@ -141,8 +112,9 @@ main(int argc, char **argv)
     }
 
     /*    Wait close jobs   */
-    while(jobs--)
-        wait(&status);
+    while(wait(&status) != -1)
+      if(errno == ECHILD)
+    	exit(EXIT_SUCCESS);
 
-    exit(EXIT_SUCCESS);
+    exit(EXIT_FAILURE); 
 }
