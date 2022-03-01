@@ -21,6 +21,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include "audio2mp3.h"
 
 #define _BUFF 255
@@ -75,4 +77,23 @@ void debugs(void){ debug = true; };
 void print_debug(const char* where, const char* msg){
     if(debug)
         printf("%s: %s\n", where, msg);
+}
+
+bool redirect_oerror(const char* filename, int handle){
+    static const mode_t filemode = S_IRUSR | S_IWUSR | S_IRGRP
+                                 | S_IROTH;
+    static const int fileflags   = O_APPEND | O_CREAT | O_WRONLY;
+
+    int fd = open(filename, fileflags, filemode);
+    if( fd == -1){
+        perror("open");
+	return false;
+    }
+    if(dup2(fd, handle) < 0){
+      close(fd);
+      perror("dup2");
+      return false;
+    }
+    close(fd);
+    return true;
 }
