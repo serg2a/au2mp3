@@ -114,7 +114,7 @@ main(int argc, char **argv)
     /*    Wait close jobs   */
     while(wait(&status) != -1)
       if(errno == ECHILD)
-    	exit(EXIT_SUCCESS);
+    	_exit(EXIT_SUCCESS);
 
-    exit(EXIT_FAILURE); 
+    _exit(EXIT_FAILURE); 
 }
