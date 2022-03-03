@@ -42,10 +42,8 @@ main(int argc, char **argv)
     if(argc < 2)
         usage();
 
-    int status;
     int jobs = 0;
     char new_name[BUFF]; 
-    pid_t pid;
 
     set_app(APP);
     set_format(FORMAT);
@@ -60,32 +58,30 @@ main(int argc, char **argv)
 
     if(prctl(PR_SET_CHILD_SUBREAPER, 1lu))
 	perror("prctl");
+
     while(*value) /*   if value != NULL   */
     {
-        if (jobs < cpu_max)
-        {
-            if (is_format(*value, format))
-            {
+        if (jobs < cpu_max) {
+            if (is_format(*value, format)){
                 print_debug("skip format: ", *value); 
                 value++;  /*   No need to precode, next file.   */
                 continue;
             }
 
-	    errno = 0;
+            switch(fork()){
+                case -1: {
+		  perror("Error fork (create new process)");
+		}
 
-            if((pid = fork()) == -1)
-                perror("Error fork (create new process)");
+                case 0: {/*   Children.   */
+                  if(!redirect_oerror("out.log", STDOUT_FILENO) ||
+                     !redirect_oerror("err.log", STDERR_FILENO))
+                    fprintf(stderr,"redirect out children\n");
 
-            if(!pid) /*   Children.   */
-            {
-                if(!redirect_oerror("out.log", STDOUT_FILENO) ||
-                   !redirect_oerror("err.log", STDERR_FILENO))
-                  fprintf(stderr,"redirect out children\n");
-
-		memset(new_name, 0, BUFF);
-                sprintf(new_name, "%s.%s", *value, format);
+		  memset(new_name, 0, BUFF);
+                  sprintf(new_name, "%s.%s", *value, format);
 		
-                char* app_arg[] = {
+                  char* app_arg[] = {
                     "-hide_banner",
                     "-loglevel", 
                     "error",
@@ -94,16 +90,19 @@ main(int argc, char **argv)
                     *value,
                     new_name,
                     (char*) NULL
-                };
+		  };
 
-                execvp(app, app_arg);
-                perror("error call ffmpeg (transcoding)"); 
-            }
-            print_debug("setlist",*value);
-            jobs++;  /*   Parent.      */
-            value++; /*   Next file.   */
-        }
-        else if(wait(&status)) /*   jobs > cpu_max   */
+                  execvp(app, app_arg);
+                  perror("error call ffmpeg (transcoding)"); 
+		}
+
+	      default: {
+        	print_debug("setlist", *value);
+            	jobs++;  /*   Parent.      */
+            	value++; /*   Next file.   */
+	      }
+	  }
+        } else if(wait(NULL)) /*   jobs > cpu_max   */
         /*   If the are no free CPU we are waiting for the first free.   */
         {
             jobs--;
@@ -112,7 +111,7 @@ main(int argc, char **argv)
     }
 
     /*    Wait close jobs   */
-    while(wait(&status) != -1)
+    while(wait(NULL) != -1)
       if(errno == ECHILD)
     	_exit(EXIT_SUCCESS);
 
