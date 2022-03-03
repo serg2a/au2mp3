@@ -27,8 +27,8 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <limits.h>
-#include <errno.h>
 #include <sys/prctl.h>
+#include <errno.h>
 
 #include "audio2mp3.h"
 
@@ -71,6 +71,8 @@ main(int argc, char **argv)
             switch(fork()){
                 case -1: {
 		  perror("Error fork (create new process)");
+		  sleep(10);
+		  continue;
 		}
 
                 case 0: {/*   Children.   */
@@ -80,7 +82,7 @@ main(int argc, char **argv)
 
 		  memset(new_name, 0, BUFF);
                   sprintf(new_name, "%s.%s", *value, format);
-		
+	
                   char* app_arg[] = {
                     "-hide_banner",
                     "-loglevel", 
