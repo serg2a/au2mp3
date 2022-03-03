@@ -1,3 +1,13 @@
+#if defined(__gnu_linux__)
+#  define OS_GLX
+#endif
+
+#if defined(_WIN32)	|| defined(_WIN64) 	|| \
+    defined(__WIN32__)	|| defined(__TOS_WIN__)	|| \
+    defined(__WINDOWS__)
+#   define OS_WIN
+#endif
+ 
 #define CPU_MAX sysconf(_SC_NPROCESSORS_ONLN) 
 #include <unistd.h>
 #include <stdbool.h>
