@@ -10,9 +10,7 @@
  
 #if defined(OS_GLX)
 # define CPU_MAX sysconf(_SC_NPROCESSORS_ONLN) 
-#endif
-
-#if defined(OS_WIN)
+#elif defined(OS_WIN)
 # define CPU_MAX 4
 #endif
 
