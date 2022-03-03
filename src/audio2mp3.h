@@ -1,14 +1,21 @@
 #if defined(__gnu_linux__)
-#  define OS_GLX
+# define OS_GLX
 #endif
 
 #if defined(_WIN32)	|| defined(_WIN64) 	|| \
-    defined(__WIN32__)	|| defined(__TOS_WIN__)	|| \
-    defined(__WINDOWS__)
-#   define OS_WIN
+  defined(__WIN32__)	|| defined(__TOS_WIN__)	|| \
+  defined(__WINDOWS__)
+# define OS_WIN
 #endif
  
-#define CPU_MAX sysconf(_SC_NPROCESSORS_ONLN) 
+#if defined(OS_GLX)
+# define CPU_MAX sysconf(_SC_NPROCESSORS_ONLN) 
+#endif
+
+#if defined(OS_WIN)
+# define CPU_MAX 4
+#endif
+
 #include <unistd.h>
 #include <stdbool.h>
 
