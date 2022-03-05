@@ -39,7 +39,7 @@ void usage(void){
            "\t-f format\n"
            "\t-p application\n"
            "\t-v debug print\n", get_name());
-    exit(EXIT_FAILURE);
+    _Exit(EXIT_FAILURE);
 }
 
 const int get_cpu(void){return au2mp3.cpu_max;}
