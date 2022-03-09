@@ -38,6 +38,7 @@ void usage(void){
     	   "\t-j cpu max\n"
            "\t-f format\n"
            "\t-p application\n"
+    	   "\t-a add argument call app\n"
            "\t-v debug print\n", get_name());
     _Exit(EXIT_FAILURE);
 }
@@ -52,10 +53,24 @@ void set_format(char* format){au2mp3.newformat = format;}
 void set_app(char* app){au2mp3.app = app;}
 
 static char prog_name[_BUFF];
+static char prog_arg[_BUFF];
 static bool debug = false;
 
 void set_name(const char *_name){
     strcpy(prog_name, _name);
+}
+
+void set_arg(const char *_arg){
+	strcpy(prog_arg, _arg);
+	int len = strlen(_arg);
+	for(int i = 0; i < len; i++)
+	  if(prog_arg[i] == ' '){
+	    prog_arg[i] = '\0';
+	  }
+}
+
+const char* get_arg(void){
+    return prog_arg;
 }
 
 const char* get_name(void){
@@ -72,7 +87,7 @@ bool is_format(const char* name, const char* newformat){
     return false;
 }
 
-void debugs(void){ debug = true; };
+void debugs(void){ debug = true; }
 
 void print_debug(const char* where, const char* msg){
     if(debug)

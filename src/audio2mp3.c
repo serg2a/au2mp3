@@ -27,7 +27,6 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <limits.h>
-#include <sys/prctl.h>
 #include <errno.h>
 
 #include "audio2mp3.h"
@@ -55,9 +54,6 @@ main(int argc, char **argv)
     char** 	value		= get_list();
     const char* app		= get_app();
 
-
-    if(prctl(PR_SET_CHILD_SUBREAPER, 1lu))
-	perror("prctl");
 
     while(*value) /*   if value != NULL   */
     {

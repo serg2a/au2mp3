@@ -35,11 +35,13 @@ set_list(int const argc, char** const argv)
      *   -j max call programm 
      *   -f new format file name
      *   -p call programm name
-     *   -v enable debug priunt    */
+     *   -v enable debug priunt    
+     *	 -a arguments for call progarm -p <app>
+     */
 
     int opt;
 
-    while((opt = getopt(argc, argv, "j:f:p:v")) != -1)
+    while((opt = getopt(argc, argv, "j:f:p:a:v")) != -1)
       switch (opt){
         case 'j':
 	  print_debug("cpu_max", "on");
@@ -60,6 +62,11 @@ set_list(int const argc, char** const argv)
           printf("Debug: on");
           debugs();
           break;
+
+	case 'a':
+	  print_debug("add arguments", "on");
+	  set_arg(optarg);
+	  break;
 
         default:
           usage();

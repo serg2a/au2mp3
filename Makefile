@@ -1,5 +1,5 @@
 CC 		:= cc
-CFLAGS 		:= -Wall -O2 -g3
+CFLAGS 		:= -Wall -O2 -pedantic
 
 vpath %.h src %.s src
 
