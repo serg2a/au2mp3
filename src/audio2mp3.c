@@ -1,21 +1,8 @@
 /* This file is part of audio2mp3.
 
-    audio2mp3 is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    audio2mp3 is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with audio2mp3.  If not, see <https://www.gnu.org/licenses/>.
-
     Author  : S. A. Kravchuk 2021.
-    email   : serg2ak@ya.ru
-    License : GPLv3                         
+    email   : serg2ak@ya.ru, spam.reg.box@ya.ru
+    License : GAttribution 4.0 International (CC BY 4.0)
 */
 
 #include <stdio.h>
@@ -34,9 +21,48 @@
 #define APP "ffmpeg"
 #define FORMAT "mp3" 
 
+
+char* ffmpeg_arg[] = {
+ "-hide_banner",
+ "-loglevel", 
+ "error",
+ "-n",
+ "-i",
+ NULL
+};
+
+typedef struct {char opt[BUFF];} sapp_arg;
+typedef struct {
+	sapp_arg arg[BUFF]; 
+	const char* name;
+	int size;
+} sapp;
+
+sapp app;
+
+int __set_arg(sapp* dest, char** source){
+	int i = 0;
+	if(*source != NULL)
+	  for(; source[i] != NULL; i++)
+	    strcpy(dest->arg[i].opt, source[i]);
+	//dest->parg[++i].opt = (char*) NULL;
+	dest->size = i;
+	dest->name = get_app();
+	return i;
+}
+
+int __add_arg(sapp* dest, char* source){
+	strcpy(dest->arg[++(dest->size)].opt, source);
+	sapp_arg* parg = dest->arg;
+	return 0;
+}
+
+
 int 
 main(int argc, char **argv)
 {
+
+
     set_name("audio2mp3");
     if(argc < 2)
         usage();
@@ -52,8 +78,10 @@ main(int argc, char **argv)
     const char* format		= get_format();
     const int	cpu_max		= get_cpu();
     char** 	value		= get_list();
-    const char* app		= get_app();
+    //const char* app		= get_app();
 
+    __set_arg(&app, ffmpeg_arg);  
+    __add_arg(&app, "new str");
 
     while(*value) /*   if value != NULL   */
     {
@@ -79,6 +107,9 @@ main(int argc, char **argv)
 		  memset(new_name, 0, BUFF);
                   sprintf(new_name, "%s.%s", *value, format);
 	
+		  __add_arg(&app, *value);
+		  __add_arg(&app, new_name);
+
                   char* app_arg[] = {
                     "-hide_banner",
                     "-loglevel", 
@@ -90,7 +121,7 @@ main(int argc, char **argv)
                     (char*) NULL
 		  };
 
-                  execvp(app, app_arg);
+                  execvp(app.name, app_arg);
                   perror("error call ffmpeg (transcoding)"); 
 		}
 
