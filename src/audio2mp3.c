@@ -18,10 +18,9 @@
 
 #include "audio2mp3.h"
 
-#define APP "ffmpeg"
-#define FORMAT "mp3" 
-
-static const char* ffmpeg_arg = "-hide_banner -loglevel error -n -i";
+static char* const APP		= "ffmpeg";
+static char* const FORMAT	= "mp3";
+static char* const ARG		= "-hide_banner -loglevel error -n -i";
 
 int 
 main(int argc, char **argv)
@@ -44,7 +43,7 @@ main(int argc, char **argv)
     char** 	value		= get_list();
 
     __init_app(&app);
-    __set_app(&app, set_arg(ffmpeg_arg));  
+    __set_app(&app, set_arg(ARG));  
 
     while(*value) /*   if value != NULL   */
     {

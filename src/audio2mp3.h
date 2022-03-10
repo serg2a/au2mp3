@@ -47,8 +47,8 @@ extern const char* get_arg(void);
 
 /*   Setting structure s_au2mp3.   */
 extern void set_cpu(int cpu_max);
-extern void set_format(char* newfromat);
-extern void set_app(char* app);
+extern void set_format(char* const newfromat);
+extern void set_app(char* const app);
 extern void set_name(const char* new_name);
 extern void set_list(int const argc, char** const argv);
 extern bool redirect_oerror(const char* filename, int handle);

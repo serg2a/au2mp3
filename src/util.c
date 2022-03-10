@@ -53,8 +53,8 @@ const char* get_app(void){return au2mp3.app;}
 char** get_list(void){return au2mp3.value;}
 
 void set_cpu(int cpu_max){au2mp3.cpu_max = (cpu_max)?cpu_max:CPU_MAX;}
-void set_format(char* format){au2mp3.newformat = format;}
-void set_app(char* app){au2mp3.app = app;}
+void set_format(char* const format){au2mp3.newformat = format;}
+void set_app(char* const app){au2mp3.app = app;}
 
 
 void set_name(const char *_name){
