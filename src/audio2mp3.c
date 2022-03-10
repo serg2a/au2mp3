@@ -22,7 +22,7 @@
 #define FORMAT "mp3" 
 
 
-char* ffmpeg_arg[] = {
+static const char* ffmpeg_arg[] = {
  "-hide_banner",
  "-loglevel", 
  "error",
@@ -31,42 +31,14 @@ char* ffmpeg_arg[] = {
  NULL
 };
 
-typedef struct {char opt[BUFF];} sapp_arg;
-typedef struct {
-	sapp_arg arg[BUFF]; 
-	const char* name;
-	int size;
-} sapp;
-
-sapp app;
-
-int __set_arg(sapp* dest, char** source){
-	int i = 0;
-	if(*source != NULL)
-	  for(; source[i] != NULL; i++)
-	    strcpy(dest->arg[i].opt, source[i]);
-	//dest->parg[++i].opt = (char*) NULL;
-	dest->size = i;
-	dest->name = get_app();
-	return i;
-}
-
-int __add_arg(sapp* dest, char* source){
-	strcpy(dest->arg[++(dest->size)].opt, source);
-	sapp_arg* parg = dest->arg;
-	return 0;
-}
-
-
 int 
 main(int argc, char **argv)
-{
-
-
+{ 
     set_name("audio2mp3");
     if(argc < 2)
         usage();
 
+    sapp app; /* app.c */
     int jobs = 0;
     char new_name[BUFF]; 
 
@@ -78,10 +50,11 @@ main(int argc, char **argv)
     const char* format		= get_format();
     const int	cpu_max		= get_cpu();
     char** 	value		= get_list();
-    //const char* app		= get_app();
 
-    __set_arg(&app, ffmpeg_arg);  
-    __add_arg(&app, "new str");
+    __init_app(&app);
+
+    if(!strcmp("ffmpeg", app.name))
+      __set_app(&app, ffmpeg_arg);  
 
     while(*value) /*   if value != NULL   */
     {
@@ -100,29 +73,21 @@ main(int argc, char **argv)
 		}
 
                 case 0: {/*   Children.   */
-                  if(!redirect_oerror("out.log", STDOUT_FILENO) ||
+                  /*if(!redirect_oerror("out.log", STDOUT_FILENO) ||
                      !redirect_oerror("err.log", STDERR_FILENO))
                     fprintf(stderr,"redirect out children\n");
+		  */
 
 		  memset(new_name, 0, BUFF);
                   sprintf(new_name, "%s.%s", *value, format);
 	
-		  __add_arg(&app, *value);
-		  __add_arg(&app, new_name);
+		  __add_app(&app, *value);
+		  __add_app(&app, new_name);
 
-                  char* app_arg[] = {
-                    "-hide_banner",
-                    "-loglevel", 
-                    "error",
-		    "-n",
-                    "-i",
-                    *value,
-                    new_name,
-                    (char*) NULL
-		  };
-
-                  execvp(app.name, app_arg);
-                  perror("error call ffmpeg (transcoding)"); 
+                  print_debug("call app", *value); 
+                  if(execvp(app.name, app.parg) == -1)
+			  perror("execvp");
+		  _Exit(EXIT_FAILURE);
 		}
 
 	      default: {

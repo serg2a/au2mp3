@@ -34,7 +34,7 @@ struct s_au2mp3{
     int cpu_max;
 } au2mp3;
 
-/*   Call after using au2mo3.   */
+/*   Call after using au2mp3.   */
 extern void init_au2mp3(int const argc, char **argv);
 
 /*   Getting structure s_au2mp3.   */
@@ -53,3 +53,16 @@ extern void set_name(const char* new_name);
 extern void set_arg(const char* add_arg);
 extern void set_list(int const argc, char** const argv);
 extern bool redirect_oerror(const char* filename, int handle);
+
+typedef struct {char opt[BUFF];} sapp_arg;
+typedef struct {
+	sapp_arg arg[BUFF]; 
+	char* parg[BUFF];
+	const char* name;
+	int size;
+} sapp;
+
+/* other app is settings */
+extern int __init_app(sapp* app);
+extern int __set_app(sapp* app, const char** source);
+extern int __add_app(sapp* app, char* source);
