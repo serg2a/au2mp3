@@ -18,6 +18,9 @@
 
 #include "audio2mp3.h"
 
+/* Default value the application runing */
+static char MIN_ARG		= 2;
+static char* const NAME		= "audio2mp3";
 static char* const APP		= "ffmpeg";
 static char* const FORMAT	= "mp3";
 static char* const ARG		= "-hide_banner -loglevel error -n -i";
@@ -25,8 +28,8 @@ static char* const ARG		= "-hide_banner -loglevel error -n -i";
 int 
 main(int argc, char **argv)
 { 
-    set_name("audio2mp3");
-    if(argc < 2)
+    set_name(NAME);
+    if(argc < MIN_ARG)
         usage();
 
     sapp app; /* app.c */
