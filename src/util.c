@@ -27,6 +27,10 @@
 
 #define _BUFF 255
 
+static char prog_name[_BUFF];
+static char prog_arg[_BUFF];
+static bool debug = false;
+
 void init_au2mp3(int const argc, char** const argv){
     set_cpu(CPU_MAX); 
     set_list(argc, argv);
@@ -52,21 +56,9 @@ void set_cpu(int cpu_max){au2mp3.cpu_max = (cpu_max)?cpu_max:CPU_MAX;}
 void set_format(char* format){au2mp3.newformat = format;}
 void set_app(char* app){au2mp3.app = app;}
 
-static char prog_name[_BUFF];
-static char prog_arg[_BUFF];
-static bool debug = false;
 
 void set_name(const char *_name){
     strcpy(prog_name, _name);
-}
-
-void set_arg(const char *_arg){
-	strcpy(prog_arg, _arg);
-	int len = strlen(_arg);
-	for(int i = 0; i < len; i++)
-	  if(prog_arg[i] == ' '){
-	    prog_arg[i] = '\0';
-	  }
 }
 
 const char* get_arg(void){
@@ -111,4 +103,24 @@ bool redirect_oerror(const char* filename, int handle){
     }
     close(fd);
     return true;
+}
+
+char* set_arg(const char* arg){
+	int len = strlen(arg);
+	if(_BUFF < len){
+		perror("Is it long app arguments");
+		return (char*) NULL;
+	}
+	memset(prog_arg, 0, sizeof(char)*len);
+	strcpy(prog_arg, arg);
+	char* parg[len];
+	parg[0] = prog_arg;
+	int k = 1;
+	for(int i = 0; i < len; i++)
+		if(prog_arg[i] == ' '){
+			prog_arg[i] = '\0';
+			parg[k++] = &prog_arg[++i];
+		}
+	parg[k] = NULL;
+	return *parg;
 }

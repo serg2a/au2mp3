@@ -7,11 +7,11 @@ int __init_app(sapp* app){
 	return 0;
 }
 
-int __set_app(sapp* app, const char** source){
+int __set_app(sapp* app, const char* source){
 	int i = 0;
-	if(*source != NULL)
-	  for(; source[i] != NULL; i++){
-	    strcpy(app->arg[i].opt, source[i]);
+	if(source != NULL)
+	  for(; &source[i] != NULL; i++){
+	    strcpy(app->arg[i].opt, &source[i]);
 	    app->parg[i] = (char*) app->arg[i].opt;
 	  }
 	app->size = i;
