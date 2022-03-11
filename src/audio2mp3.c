@@ -79,7 +79,7 @@ main(int argc, char **argv)
                   print_debug("call app", *value); 
                   if(execvp(get_app(), app.parg) == -1)
 			  perror("execvp");
-		  _Exit(EXIT_FAILURE);
+		  break;
 		}
 
 	      default: {
