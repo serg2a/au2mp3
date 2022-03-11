@@ -19,7 +19,7 @@
 #include "audio2mp3.h"
 
 /* Default value the application runing */
-static char MIN_ARG		= 2;
+static unsigned char MIN_ARG	= 2U;
 static char* const NAME		= "audio2mp3";
 static char* const APP		= "ffmpeg";
 static char* const FORMAT	= "mp3";
@@ -32,21 +32,25 @@ main(int argc, char **argv)
     if(argc < MIN_ARG)
         usage();
 
-    sapp app; /* app.c */
     int jobs = 0;
     char new_name[BUFF]; 
+
+    init_au2mp3(argc, argv);
 
     set_app(APP);
     set_format(FORMAT);
 
-    init_au2mp3(argc, argv);
+    sapp app; /* app.c */
+    set_list(&app, argc, argv);
+
+    if(!strcmp(get_app(), APP))
+      __set_app(&app, set_arg(ARG));  
 
     const char* format		= get_format();
     const int	cpu_max		= get_cpu();
     char** 	value		= get_list();
 
-    __init_app(&app);
-    __set_app(&app, set_arg(ARG));  
+
 
     while(*value) /*   if value != NULL   */
     {
@@ -77,7 +81,7 @@ main(int argc, char **argv)
 		  __add_app(&app, new_name);
 
                   print_debug("call app", *value); 
-                  if(execvp(app.name, app.parg) == -1)
+                  if(execvp(get_app(), app.parg) == -1)
 			  perror("execvp");
 		  _Exit(EXIT_FAILURE);
 		}

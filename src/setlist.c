@@ -31,7 +31,7 @@ extern void debugs(void);
 
 
 void 
-set_list(int const argc, char** const argv)
+set_list(sapp* app, int const argc, char** const argv)
 {
     /*   Key:
      *   -j max call programm 
@@ -67,7 +67,7 @@ set_list(int const argc, char** const argv)
 
 	case 'a':
 	  print_debug("add arguments", "on");
-	  set_arg(optarg);
+	  __set_app(app, set_arg(optarg));
 	  break;
 
         default:

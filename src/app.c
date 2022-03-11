@@ -1,19 +1,18 @@
 #include "audio2mp3.h"
 #include <string.h>
+#include <stdio.h>
 
-int __init_app(sapp* app){
-	app->size = 0;
-	app->name = get_app();
-	return 0;
-}
-
-int __set_app(sapp* app, const char* source){
-	int i = 0;
-	if(source != NULL)
-	  for(; &source[i] != NULL; i++){
-	    strcpy(app->arg[i].opt, &source[i]);
+int __set_app(sapp* app, const char** source){
+	memset(app, 0, sizeof(sapp));
+	int i = app->size = 0;
+	printf("in set_arg\n");
+	if(*source != NULL)
+	  for(i = 0; source[i] != NULL; i++){
+	    strcpy(app->arg[i].opt, source[i]);
+	    printf("%s\n", source[i]);
 	    app->parg[i] = (char*) app->arg[i].opt;
 	  }
+	app->parg[i] = (char*) NULL;
 	app->size = i;
 	return app->size;
 }

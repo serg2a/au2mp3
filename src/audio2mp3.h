@@ -34,6 +34,14 @@ struct s_au2mp3{
     int cpu_max;
 } au2mp3;
 
+typedef struct {char opt[BUFF];} sapp_arg;
+typedef struct {
+	sapp_arg arg[BUFF]; 
+	char* parg[BUFF];
+	const char* name;
+	int size;
+} sapp;
+
 /*   Call after using au2mp3.   */
 extern void init_au2mp3(int const argc, char **argv);
 
@@ -43,26 +51,18 @@ extern const char* get_format(void);
 extern char** get_list(void);
 extern const char* get_app(void);
 extern const char* get_name(void);
-extern const char* get_arg(void);
+extern const char** get_arg(void);
 
 /*   Setting structure s_au2mp3.   */
 extern void set_cpu(int cpu_max);
 extern void set_format(char* const newfromat);
 extern void set_app(char* const app);
 extern void set_name(const char* new_name);
-extern void set_list(int const argc, char** const argv);
+extern void set_list(sapp* app, int const argc, char** const argv);
 extern bool redirect_oerror(const char* filename, int handle);
-extern char* set_arg(const char* add_arg);
+extern const char** set_arg(const char* add_arg);
 
-typedef struct {char opt[BUFF];} sapp_arg;
-typedef struct {
-	sapp_arg arg[BUFF]; 
-	char* parg[BUFF];
-	const char* name;
-	int size;
-} sapp;
 
 /* other app is settings */
-extern int __init_app(sapp* app);
-extern int __set_app(sapp* app, const char* source);
+extern int __set_app(sapp* app, const char** source);
 extern int __add_app(sapp* app, char* source);

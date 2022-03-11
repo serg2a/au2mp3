@@ -29,11 +29,12 @@
 
 static char prog_name[_BUFF];
 static char prog_arg[_BUFF];
+static char* parg[_BUFF];
 static bool debug = false;
 
 void init_au2mp3(int const argc, char** const argv){
+    memset(&au2mp3, 0, sizeof(struct s_au2mp3));
     set_cpu(CPU_MAX); 
-    set_list(argc, argv);
 }
 
 void usage(void){
@@ -61,8 +62,8 @@ void set_name(const char *_name){
     strcpy(prog_name, _name);
 }
 
-const char* get_arg(void){
-    return prog_arg;
+const char** get_arg(void){
+    return parg;
 }
 
 const char* get_name(void){
@@ -105,15 +106,14 @@ bool redirect_oerror(const char* filename, int handle){
     return true;
 }
 
-char* set_arg(const char* arg){
+const char** set_arg(const char* arg){
 	int len = strlen(arg);
 	if(_BUFF < len){
 		perror("Is it long app arguments");
-		return (char*) NULL;
+		return NULL;
 	}
 	memset(prog_arg, 0, sizeof(char)*len);
 	strcpy(prog_arg, arg);
-	char* parg[len];
 	parg[0] = prog_arg;
 	int k = 1;
 	for(int i = 0; i < len; i++)
@@ -122,5 +122,5 @@ char* set_arg(const char* arg){
 			parg[k++] = &prog_arg[++i];
 		}
 	parg[k] = NULL;
-	return *parg;
+	return parg;
 }
