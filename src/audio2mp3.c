@@ -49,6 +49,10 @@ main(int argc, char **argv)
 
     int jobs = 0;
     char new_name[BUFF]; 
+    pid_t pid[BUFF];
+    memset(pid, 0, sizeof(pid_t)*BUFF); 
+    u_int16_t i = 1;
+
     while(*value) {
         if (jobs < cpu_max) {
             if (is_format(*value, format)){
@@ -65,10 +69,6 @@ main(int argc, char **argv)
 		}
 
                 case 0: {/*   Children.   */
-                  /*if(!redirect_oerror("out.log", STDOUT_FILENO) ||
-                     !redirect_oerror("err.log", STDERR_FILENO))
-                    fprintf(stderr,"redirect out children\n");
-		  */
 
 		  memset(new_name, 0, BUFF);
                   sprintf(new_name, "%s.%s", *value, format);
@@ -86,20 +86,21 @@ main(int argc, char **argv)
         	print_debug("setlist", *value);
             	jobs++;  /*   Parent.      */
             	value++; /*   Next file.   */
+		i++;	 /*   counter pid  */
 	      }
 	  }
         } else if(wait(NULL)) /*   jobs > cpu_max   */
         /*   If the are no free CPU we are waiting for the first free.   */
         {
+  	    i--;
             jobs--;
         }
         
     }
 
     /*    Wait close jobs   */
-    while(wait(NULL) != -1)
-      if(errno == ECHILD)
-    	_exit(EXIT_SUCCESS);
+    for(;i > 0; i--)
+      wait(NULL);
 
-    _exit(EXIT_FAILURE); 
+    _exit(EXIT_SUCCESS); 
 }
