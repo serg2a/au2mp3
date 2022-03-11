@@ -63,7 +63,7 @@ void set_name(const char *_name){
 }
 
 const char** get_arg(void){
-    return parg;
+    return (const char**) parg;
 }
 
 const char* get_name(void){
@@ -122,5 +122,5 @@ const char** set_arg(const char* arg){
 			parg[k++] = &prog_arg[++i];
 		}
 	parg[k] = NULL;
-	return parg;
+	return (const char**) parg;
 }

@@ -5,11 +5,9 @@
 int __set_app(sapp* app, const char** source){
 	memset(app, 0, sizeof(sapp));
 	int i = app->size = 0;
-	printf("in set_arg\n");
 	if(*source != NULL)
 	  for(i = 0; source[i] != NULL; i++){
 	    strcpy(app->arg[i].opt, source[i]);
-	    printf("%s\n", source[i]);
 	    app->parg[i] = (char*) app->arg[i].opt;
 	  }
 	app->parg[i] = (char*) NULL;
