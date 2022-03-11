@@ -27,8 +27,8 @@
 
 #define _BUFF 255
 
-static char prog_name[_BUFF];
-static char prog_arg[_BUFF];
+static char prog_name[_BUFF]	= {0};
+static char prog_arg[_BUFF]	= {0};
 static char* parg[_BUFF];
 static bool debug = false;
 

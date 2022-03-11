@@ -48,7 +48,7 @@ main(int argc, char **argv)
     char** 	value		= get_list();
 
     int jobs = 0;
-    char new_name[BUFF]; 
+    char new_name[BUFF] = {0}; 
     pid_t pid[BUFF];
     memset(pid, 0, sizeof(pid_t)*BUFF); 
     u_int16_t i = 1;
