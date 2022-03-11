@@ -28,7 +28,7 @@ static char* const ARG		= "-hide_banner -loglevel error -n -i";
 int 
 main(int argc, char **argv)
 { 
-    set_name(NAME);
+    set_name(NAME); /* This application name */
     if(argc < MIN_ARG)
         usage();
 
@@ -49,8 +49,7 @@ main(int argc, char **argv)
 
     int jobs = 0;
     char new_name[BUFF]; 
-    while(*value) /*   if value != NULL   */
-    {
+    while(*value) {
         if (jobs < cpu_max) {
             if (is_format(*value, format)){
                 print_debug("skip format: ", *value); 
