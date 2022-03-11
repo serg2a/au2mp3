@@ -17,7 +17,7 @@
 #include <unistd.h>
 #include <stdbool.h>
 
-enum { BUFF = 255 };
+enum {BUFF = 255U};
 extern bool 
 is_format(const char* name, const char* newformat);
 extern void 

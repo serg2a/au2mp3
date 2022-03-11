@@ -32,13 +32,10 @@ main(int argc, char **argv)
     if(argc < MIN_ARG)
         usage();
 
-    int jobs = 0;
-    char new_name[BUFF]; 
-
     init_au2mp3(argc, argv);
 
-    set_app(APP);
-    set_format(FORMAT);
+    set_app(APP);	/* application name for call execvp(). 	*/
+    set_format(FORMAT); /* new format encoding.			*/
 
     sapp app; /* app.c */
     set_list(&app, argc, argv);
@@ -50,8 +47,8 @@ main(int argc, char **argv)
     const int	cpu_max		= get_cpu();
     char** 	value		= get_list();
 
-
-
+    int jobs = 0;
+    char new_name[BUFF]; 
     while(*value) /*   if value != NULL   */
     {
         if (jobs < cpu_max) {
