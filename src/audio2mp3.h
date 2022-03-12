@@ -1,3 +1,4 @@
+#pragma once
 #if defined(__gnu_linux__)
 # define OS_GLX
 #endif
@@ -16,15 +17,16 @@
 
 #include <unistd.h>
 #include <stdbool.h>
+#include "app.h"
 
-enum {BUFF = 255U};
+#define BUFF 255U
+
 extern bool 
 is_format(const char* name, const char* newformat);
 extern void 
 print_debug(const char* where, const char* msg);
 extern void
 usage(void);
-
 
 /*  structure edit  */
 struct s_au2mp3{
@@ -33,14 +35,6 @@ struct s_au2mp3{
     char* app;
     int cpu_max;
 } au2mp3;
-
-typedef struct {char opt[BUFF];} sapp_arg;
-typedef struct {
-	sapp_arg arg[BUFF]; 
-	char* parg[BUFF];
-	const char* name;
-	int size;
-} sapp;
 
 /*   Call after using au2mp3.   */
 extern void init_au2mp3(int const argc, char **argv);
@@ -61,8 +55,3 @@ extern void set_name(const char* new_name);
 extern void set_list(sapp* app, int const argc, char** const argv);
 extern bool redirect_oerror(const char* filename, int handle);
 extern const char** set_arg(const char* add_arg);
-
-
-/* other app is settings */
-extern int __set_app(sapp* app, const char** source);
-extern int __add_app(sapp* app, char* source);

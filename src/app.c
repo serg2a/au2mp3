@@ -1,6 +1,20 @@
-#include "audio2mp3.h"
 #include <string.h>
 #include <stdio.h>
+#include "app.h"
+#include "audio2mp3.h"
+
+int apps(sapp* app, const char* value, const char* const format){
+  char new_value[BUFF] = {0}; 
+  sprintf(new_value, "%s.%s", value, format);
+
+  __add_app(app, value);
+  __add_app(app, new_value);
+
+  print_debug("call app", value); 
+  if(execvp(get_app(), app->parg) == -1)
+        perror("execvp");
+  return 127;
+}
 
 int __set_app(sapp* app, const char** source){
 /*
@@ -20,7 +34,7 @@ int __set_app(sapp* app, const char** source){
 	return app->size;
 }
 
-int __add_app(sapp* app, char* source){
+int __add_app(sapp* app, const char* source){
 /*
 *  Add string array arguments for execvp().
 *  Return 0 is ok.

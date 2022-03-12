@@ -17,6 +17,7 @@
 #include <errno.h>
 
 #include "audio2mp3.h"
+#include "app.h"
 
 /* Default value the application runing */
 static unsigned char MIN_ARG	= 2U;
@@ -38,6 +39,7 @@ main(int argc, char **argv)
     set_format(FORMAT); /* new format encoding.			*/
 
     sapp app; /* app.c */
+    __set_app(&app, set_arg("")); //FIXME TO DO!
     set_list(&app, argc, argv);
 
     if(!strcmp(get_app(), APP))
@@ -48,7 +50,6 @@ main(int argc, char **argv)
     char** 	value		= get_list();
 
     int jobs = 0;
-    char new_name[BUFF] = {0}; 
     pid_t pid[BUFF];
     memset(pid, 0, sizeof(pid_t)*BUFF); 
     u_int16_t i = 1;
@@ -69,16 +70,7 @@ main(int argc, char **argv)
 		}
 
                 case 0: {/*   Children.   */
-
-		  memset(new_name, 0, BUFF);
-                  sprintf(new_name, "%s.%s", *value, format);
-	
-		  __add_app(&app, *value);
-		  __add_app(&app, new_name);
-
-                  print_debug("call app", *value); 
-                  if(execvp(get_app(), app.parg) == -1)
-			  perror("execvp");
+                  apps(&app, *value, format);
 		  break;
 		}
 
