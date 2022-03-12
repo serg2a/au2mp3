@@ -45,14 +45,12 @@ main(int argc, char **argv)
     if(!strcmp(get_app(), APP))
       __set_app(&app, set_arg(ARG));  
 
-    const char* format		= get_format();
-    const int	cpu_max		= get_cpu();
-    char** 	value		= get_list();
+    const char*     format  		= get_format();
+    const u_int16_t cpu_max		= get_cpu();
+    char**          value               = get_list();
 
-    int jobs = 0;
-    pid_t pid[BUFF];
-    memset(pid, 0, sizeof(pid_t)*BUFF); 
-    u_int16_t i = 1;
+    u_int16_t jobs = 0U;
+    u_int16_t i = 1U;
 
     while(*value) {
         if (jobs < cpu_max) {
