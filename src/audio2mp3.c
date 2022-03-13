@@ -22,9 +22,10 @@
 /* Default value the application runing */
 static unsigned char MIN_ARG	= 2U;
 static char* const NAME		= "audio2mp3";
-static char* const APP		= "ffmpeg";
 static char* const FORMAT	= "mp3";
-static char* const ARG		= "-hide_banner -loglevel error -n -i";
+char* const APP		= "ffmpeg";
+char* const ARG		= "-hide_banner -loglevel error -n -i";
+char* const ARG2		= "-c:v copy -c:a pcm_f32le";
 
 int 
 main(int argc, char **argv)
@@ -42,8 +43,6 @@ main(int argc, char **argv)
     __set_app(&app, set_arg("")); //FIXME TO DO!
     set_list(&app, argc, argv);
 
-    if(!strcmp(get_app(), APP))
-      __set_app(&app, set_arg(ARG));  
 
     const char*     format  		= get_format();
     const u_int16_t cpu_max		= get_cpu();
