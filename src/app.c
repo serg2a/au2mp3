@@ -4,18 +4,20 @@
 #include "audio2mp3.h"
 
 int apps(sapp* app, const char* value, const char* const format){
+
   extern char* const APP;
+  char sarg[BUFF];
+  if(!strcmp(get_app(), APP)){
   extern char* const ARG;
   extern char* const ARG2;
   char new_value[100] = {0}; 
   sprintf(new_value, "%s.%s", value, format);
-
-  if(!strcmp(get_app(), APP)){
-    char sarg[BUFF];
     sprintf(sarg,"%s %s %s %s", ARG, value, ARG2, new_value);
     __set_app(app, set_arg(sarg));  
+  } else {
+    sprintf(sarg,"%s %s", app->larg, value);
+    __set_app(app, set_arg(sarg));  
   }
-
   //__add_app(app, value);
   //__add_app(app, new_value);
 

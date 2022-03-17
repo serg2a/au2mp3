@@ -7,6 +7,7 @@ typedef struct {char opt[BUFF];} sapp_arg;
 typedef struct {
 	sapp_arg arg[BUFF]; 
 	char* parg[BUFF];
+	char* larg;
 	const char* name;
 	int size;
 } sapp;

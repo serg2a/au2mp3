@@ -68,6 +68,8 @@ set_list(sapp* app, int const argc, char** const argv)
 	case 'a':
 	  print_debug("add arguments", "on");
 	  __set_app(app, set_arg(optarg));
+	  app->larg = (char*) &app->arg[BUFF-1];
+	  strcpy(app->larg, optarg); 
 	  break;
 
         default:
